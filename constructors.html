@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Constructors Analytics</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="container mt-4">
+
+    <h1 class="mb-3">🏁 Constructor Performance Analytics</h1>
+
+    <!-- =========================
+         FILTER SECTION
+    ========================== -->
+    <form method="GET" class="mb-4 d-flex gap-2 align-items-end">
+
+        <div>
+            <label class="form-label">Filter by Year</label>
+            <input type="number"
+                   name="year"
+                   class="form-control"
+                   placeholder="e.g. 2020"
+                   value="{{ year or '' }}">
+        </div>
+
+        <div>
+            <button class="btn btn-primary">Apply</button>
+        </div>
+
+        <div>
+            <a href="/constructors" class="btn btn-secondary">Reset</a>
+        </div>
+
+    </form>
+
+    <!-- =========================
+         TABLE
+    ========================== -->
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Constructor</th>
+                <th>Wins</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row.name }}</td>
+                <td>{{ row.wins }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- =========================
+         CHART
+    ========================== -->
+    <div class="mt-5">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const labels = JSON.parse('{{ labels | default([]) | tojson | safe }}');
+        const values = JSON.parse('{{ values | default([]) | tojson | safe }}');
+
+        const ctx = document.getElementById('chart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Wins',
+                    data: values,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    });
+    </script>
+
+    <!-- BACK BUTTON -->
+    <div class="mt-4">
+        <a href="/" class="btn btn-dark">← Back to Home</a>
+    </div>
+
+</body>
+</html>
