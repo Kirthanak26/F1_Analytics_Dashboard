@@ -21,4 +21,4 @@ load_csv("pit_stops.csv", "pit_stops")
 
 conn.close()
 
-print("✅ All data loaded into f1.db")
+print("All data loaded into f1.db")
